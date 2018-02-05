@@ -18,12 +18,12 @@ public class GuestBookDao {
 	
 	public List<GuestBookVo> getGuestbooklist(){
 		
-		return sqlsession.selectList("getGuestbooklist");
+		return sqlsession.selectList("guestbook.getGuestbooklist");
 	}
 	
 	public void insertGuestbook(GuestBookVo guestbookvo) {
 		
-		sqlsession.insert("insertGuestbook", guestbookvo);
+		sqlsession.insert("guestbook.insertGuestbook", guestbookvo);
 	}
 	
 	public void deleteGuestbook(int no,String password) {
@@ -31,6 +31,6 @@ public class GuestBookDao {
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("no", no);
 		map.put("password", password);
-		sqlsession.delete("deleteGuestbookByNoPassword", map);
+		sqlsession.delete("guestbook.deleteGuestbookByNoPassword", map);
 	}
 }

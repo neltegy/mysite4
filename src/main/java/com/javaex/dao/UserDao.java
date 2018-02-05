@@ -21,22 +21,22 @@ public class UserDao {
 		map.put("email", email);
 		map.put("password", password);
 		
-		return sqlsession.selectOne("selectUserByEmailPW", map);
+		return sqlsession.selectOne("user.selectUserByEmailPW", map);
 	}
 	
 	public void insert(UserVo uservo) {
 		
-		sqlsession.insert("insertUser", uservo);
+		sqlsession.insert("user.insertUser", uservo);
 	}
 	
 	public UserVo getUserByNo(int no) {
 		
-		return sqlsession.selectOne("selectUserByNo", no);
+		return sqlsession.selectOne("user.selectUserByNo", no);
 	}
 	
 	public void updateUser(UserVo uservo) {
 		
-		sqlsession.insert("insertUserByNamePasswordGenderNo", uservo);
+		sqlsession.insert("user.insertUserByNamePasswordGenderNo", uservo);
 	}
 	
 }

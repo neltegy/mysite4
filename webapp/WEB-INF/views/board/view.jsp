@@ -43,20 +43,20 @@
 				<c:choose>
 					<c:when test="${empty authUser }"> <!-- authUser가 비어있음경우 true가 나옴 -->
 						<div class="bottom">
-						<a href="${pageContext.request.contextPath }/board?a=list">글목록</a>
+						<a href="${pageContext.request.contextPath }/board/list">글목록</a>
 						</div>
 					</c:when>
 					<c:otherwise> <!-- 로그인한 사용자들 -->
 						<c:choose>
 							<c:when test="${authUser.no eq boardvo.user_no }"> 
 								<div class="bottom">
-								<a href="${pageContext.request.contextPath }/board?a=list">글목록</a>
-								<a href="${pageContext.request.contextPath }/board?a=modifyform&no=${boardno }">글수정</a>
+								<a href="${pageContext.request.contextPath }/board/list">글목록</a>
+								<a href="${pageContext.request.contextPath }/board/modifyform?boardno=${boardvo.no }">글수정</a>
 								</div>
 							</c:when>
 							<c:otherwise>
 								<div class="bottom">
-								<a href="${pageContext.request.contextPath }/board?a=list">글목록</a>
+								<a href="${pageContext.request.contextPath }/board/list">글목록</a>
 								</div>
 							</c:otherwise>
 						</c:choose>

@@ -46,7 +46,7 @@
 						</c:choose>
 						</c:if>
 						
-						<td><a href="${pageContext.request.contextPath }/board?a=view&boardno=${volist.boardno }">${volist.title }</a></td><!--타이틀이 안보이면-->
+						<td><a href="${pageContext.request.contextPath }/board/view?boardno=${volist.boardno }&hit=${volist.hit}">${volist.title }</a></td><!--타이틀이 안보이면-->
 																												   <!-- null인 상태 -->
 						<td>${volist.name }</td>
 						<td>${volist.hit }</td>
@@ -78,7 +78,7 @@
 						<li><a href="${pageContext.request.contextPath }/board/list?choice_pageno=${1 }">◀◀</a></li>
 						
 						<c:choose>
-							<c:when test="${param.choice_pageno eq 0}">
+							<c:when test="${param.choice_pageno eq 1}">
 								<li><a href="${pageContext.request.contextPath }/board/list?choice_pageno=${param.choice_pageno }">◀</a></li><!-- 마지막페이지초과 -->
 							</c:when>
 							<c:otherwise>
