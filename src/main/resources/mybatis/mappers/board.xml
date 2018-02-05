@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+
+	<select id="getBoardList" resultType="UserBoardVo">
+		<![CDATA[
+			select u.no userno
+			      ,name
+			      ,email
+			      ,password
+			      ,gender
+			      ,b.no boardno
+			      ,title
+			      ,content
+			      ,to_char(reg_date,'yyyy"년"mm"월"dd"일"hh"시"mm"분"') reg_date
+			      ,hit
+			      ,user_no
+			from users u
+			    ,board b
+			where u.no = b.user_no
+			order by reg_date desc
+		]]>
+	</select>
+	
+	<delete id="deleteBoardByBoardNo" parameterType="int">
+		<![CDATA[
+			delete from board
+			where no = #{boardno}
+		]]>
+	</delete>
+	
+	<select id="selectBoardByKwd" parameterType="String" resultType="UserBoardVo">
+		<![CDATA[
+			select u.no userno
+			      ,name
+			      ,email
+			      ,password
+			      ,b.no boardno
+			      ,title
+			      ,content
+			      ,reg_date
+			      ,hit
+			      ,user_no
+			from users u
+			    ,board b
+			where u.no = b.user_no
+			  and title like #{kwd }
+		]]>
+	</select>
+
+	
+</mapper>
