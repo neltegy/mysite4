@@ -45,4 +45,15 @@
 		]]>
 	</update>
 	
+	<select id="selectUserByEmail" parameterType="String" resultType="UserVo">
+		<![CDATA[
+			select no
+				  ,name
+			      ,email
+			      ,gender
+			from users
+			where email = #{email}
+		]]>
+	</select>
+	
 </mapper>

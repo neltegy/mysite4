@@ -24,6 +24,7 @@ public class GuestBookDao {
 	public void insertGuestbook(GuestBookVo guestbookvo) {
 		
 		sqlsession.insert("guestbook.insertGuestbook", guestbookvo);
+		
 	}
 	
 	public void deleteGuestbook(int no,String password) {
@@ -32,5 +33,15 @@ public class GuestBookDao {
 		map.put("no", no);
 		map.put("password", password);
 		sqlsession.delete("guestbook.deleteGuestbookByNoPassword", map);
+	}
+	
+	public List<GuestBookVo> getGuestbooklistpage(int page){
+		
+		return sqlsession.selectList("guestbook.selectListBypage", page);
+	}
+	
+	public GuestBookVo selectGuestbook(int no) {
+		
+		return sqlsession.selectOne("guestbook.selectGuestbookByNo", no);
 	}
 }

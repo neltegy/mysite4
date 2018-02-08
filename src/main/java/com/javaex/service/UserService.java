@@ -27,6 +27,17 @@ public class UserService {
 		return userdao.getUserByNo(no);
 	}
 	
+	public boolean emailcheck(String email) {
+		boolean result;
+		if(userdao.getUser(email) == null) { //주소값이 있냐 없냐 즉 new 를 했냐 안했냐를 묻는다. 해당 데이터가 없으면 new를 안해서 주소값이 없음
+			result = true;
+		}else {
+			result = false;
+		}
+			
+		return result;
+	}
+	
 	public void modify(UserVo uservo) {
 		
 		userdao.updateUser(uservo);

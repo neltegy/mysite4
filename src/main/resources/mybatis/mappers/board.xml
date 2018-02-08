@@ -47,7 +47,7 @@
 			where u.no = b.user_no
 			  and title like #{kwd }
 		]]>
-	</select>
+	</select><!-- oracle like-mybatis -WHERE(AND) column LIKE '%'+#{search_value}+'%' -->
 	
 	<select id="getboardByBoardno" parameterType="int" resultType="BoardVo">
 		<![CDATA[

@@ -14,9 +14,14 @@
 	</select>
 	
 	<insert id="insertGuestbook" parameterType="GuestBookVo">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE"> <!-- 	BEFORE 또는 AFTER를 셋팅할 수 있다. BEFORE로 설정하면 키를 먼저 조회하고 그 값을 keyProperty 에 셋팅한 뒤 insert 구문을 실행한다.
+																	 AFTER로 설정하면 insert 구문을 실행한 뒤 selectKey 구문을 실행한다. 오라클과 같은 데이터베이스에서는 insert구문 내부에서 일관된 호출형태로 처리한다. -->
+	    	select seq_guestbook_no.nextval 
+	    	from dual
+	    </selectKey>
 		<![CDATA[
 			insert into guestbook
-				values( seq_guestbook_no.nextval
+				values( #{no}
 				       ,#{name}
 				       ,#{password}
 				       ,#{content}
@@ -32,5 +37,37 @@
 		]]>
 	</delete>
 
+	<select id="selectListBypage" parameterType="int" resultType="GuestBookVo">
+		<![CDATA[
+			select r,no,name,password,content,reg_date
+			from (select rownum r
+				      	,no
+				     	,name
+				     	,password
+				     	,content
+				     	,reg_date
+			      from (select no
+			                  ,name
+			                  ,password
+			                  ,content
+			                  ,reg_date
+			            from guestbook
+			            order by reg_date desc)o
+				  )t
+			where r >= (#{page}-1)*5 + 1
+			  and r <= #{page}*5
+		]]>
+	</select>
 	
+	<select id="selectGuestbookByNo" parameterType="int" resultType="GuestBookVo">
+		<![CDATA[
+			select no
+			      ,name
+			      ,password
+			      ,content
+			      ,reg_date
+			from guestbook
+			where no = #{no}
+		]]>
+	</select>
 </mapper>

@@ -34,6 +34,11 @@ public class UserDao {
 		return sqlsession.selectOne("user.selectUserByNo", no);
 	}
 	
+	public UserVo getUser(String email) {
+		
+		return sqlsession.selectOne("user.selectUserByEmail", email);
+	}
+	
 	public void updateUser(UserVo uservo) {
 		
 		sqlsession.insert("user.insertUserByNamePasswordGenderNo", uservo);

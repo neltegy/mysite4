@@ -19,13 +19,26 @@ public class GuestBookService {
 		return guestbookdao.getGuestbooklist();
 	}
 	
-	public void save(GuestBookVo guestbookvo) {
+	public GuestBookVo save(GuestBookVo guestbookvo) {
 		
 		guestbookdao.insertGuestbook(guestbookvo);
+		int no = guestbookvo.getNo();
+		
+		return guestbookdao.selectGuestbook(no);
 	}
 	
 	public void removes(int no,String password) {
 		
 		guestbookdao.deleteGuestbook(no,password);
+	}
+	
+	public List<GuestBookVo> bringGuestbookinfopage(int page){
+		
+		return guestbookdao.getGuestbooklistpage(page);
+	}
+	
+	public void delete(int no,String password) {
+		
+		guestbookdao.deleteGuestbook(no, password);
 	}
 }

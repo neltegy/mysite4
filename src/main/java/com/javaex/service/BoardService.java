@@ -15,7 +15,7 @@ public class BoardService {
 	@Autowired
 	private BoardDao boardDao;
 	
-	public List<UserBoardVo> bringlist() {
+	public List<UserBoardVo> bringlist() { //내부에서만 사용하는데 코드가 길어지고 복잡하면 potected 나 private 메소드를 만들어 따로뺀다.
 		
 		return boardDao.getlist();
 	}
