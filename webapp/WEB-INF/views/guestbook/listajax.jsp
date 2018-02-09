@@ -27,8 +27,6 @@
 		<div id="wrapper">
 			<div id="content">
 				<div id="guestbook">
-					
-					<%-- <form action="${pageContext.request.contextPath }/gb/api/save" method="post"> --%>
 						
 						<table>
 							<tr>
@@ -42,8 +40,6 @@
 								<td colspan=4 align=right><input type="submit" VALUE=" 확인 " /></td>
 							</tr>
 						</table>
-					<!-- </form> -->
-					<input id= "btnDel" type="button" value="삭제예제버튼" />
 					
 					<ul id="listArea">
 						
@@ -70,10 +66,11 @@
 				<div class="modal-body">
 					<label>비밀번호</label>
 					<input type="password" name="modalPassword" id="modalPassword"><br>	
-					<input type="hidden" name="modalPassword" value="" id="modalNo"> <br>	
+					<input type="hidden" name="modalPassword" value="" id="modalNo"> <br>
+					<h1 id="login_process"></h1>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" id="btn_cancel">취소</button>
 					<button type="button" class="btn btn-danger" id="btn_del">삭제</button>
 				</div>
 			</div><!-- /.modal-content -->
@@ -86,6 +83,44 @@
 <script type="text/javascript">
 var page = 1;
 	
+$(document).ready(function(){
+	
+	conajax();
+});
+
+$("#btnNext").on("click",function(){
+	page++;
+	console.log(page);
+	
+	conajax();
+});
+
+function conajax(){
+	$.ajax({
+		url : "${pageContext.request.contextPath }/gb/api/list",
+		type : "post",
+		/* contentType : "application/json",
+		data : JSON.stringify(guestbookVo), */
+		data : {page: page},
+		
+		dataType : "json",
+		success : function(guestbooklist){
+			/*성공시 처리해야될 코드 작성*/
+			console.log(guestbooklist);
+			
+			for(var i = 0 ; i < guestbooklist.length; i++){
+				render(guestbooklist[i],"down");
+			}
+			
+		},
+		
+		error : function(XHR, status, error) {
+			console.error(status + " : " + error);
+		}
+
+	});
+};
+
 	$("[type=submit]").on("click",function(){
 		//ajax로 방금 보낸데이터로 받아서 up으로해서 추가한다.
 		var name = $("[name=name]").val();
@@ -121,59 +156,21 @@ var page = 1;
 		});
 	});
 
-	$(document).ready(function(){
-		
-		conajax();
-	});
-	
-	$("#btnNext").on("click",function(){
-		page++;
-		console.log(page);
-		
-		conajax();
-	});
-	
-/* 	$("#btn_del").on("click",function(){
-		$("#del-pop").hide();
-	}); */
-	
-	
-function conajax(){
-	$.ajax({
-		url : "${pageContext.request.contextPath }/gb/api/list",
-		type : "post",
-		/* contentType : "application/json",
-		data : JSON.stringify(guestbookVo), */
-		data : {page: page},
-		
-		dataType : "json",
-		success : function(guestbooklist){
-			/*성공시 처리해야될 코드 작성*/
-			console.log(guestbooklist);
-			
-			for(var i = 0 ; i < guestbooklist.length; i++){
-				render(guestbooklist[i],"down");
-			}
-			
-		},
-		
-		error : function(XHR, status, error) {
-			console.error(status + " : " + error);
-		}
+$("#btn_cancel").on("click",function(){
+	$("#modalPassword").val("");
+});
 
-	});
-};
-
-$("ul").on("click",".btn_del_content",function(){ /* 게시물의 삭제버튼들중 하나를 눌렀을 경우 */
-	
+$("#listArea").on("click",".btn_del_content",function(){ /* 게시물의 삭제버튼들중 하나를 눌렀을 경우 */
+	$("#login_process").text(""); //전에있던 비밀번호가 틀렷습니다를 삭제하고 시작
 	var no = $(this).data("no");
-
+	
 	$("#modalNo").val(no);
 	$("#del-pop").modal();
 	
 });
 
 $("#btn_del").on("click",function(){
+	
 	var no = $("#modalNo").val();
 	var password = $("#modalPassword").val();
 	
@@ -191,11 +188,16 @@ $("#btn_del").on("click",function(){
 		data : JSON.stringify(modalGuestbookVo),
 		
 		dataType : "json",
-		success : function(no){
+		success : function(map){
 			/*성공시 처리해야될 코드 작성*/
-			$("#del-pop").modal("hide");
 			
-			$("[id="+no+"]").remove();
+			if(map.fail == 1){ //맞는 비밀번호
+				$("#del-pop").modal("hide");
+				$("[id="+map.no+"]").remove();
+			}else if(map.fail == 0){ //틀린비번
+				$("#login_process").text("비밀번호가 다릅니다.").css("color","red");
+			}
+			
 		},
 		
 		error : function(XHR, status, error) {
@@ -206,7 +208,6 @@ $("#btn_del").on("click",function(){
 
 // <a href=''>삭제</a> ${pageContext.request.contextPath }/gb/api/deleteform?no="+guestbookVo.no+"
 
-// <button type="button" class="btn btn-danger" id="btn_del">삭제</button>
 function render(guestbookVo , updown){
 	var str = "";
 	str += "<li id="+guestbookVo.no+">";

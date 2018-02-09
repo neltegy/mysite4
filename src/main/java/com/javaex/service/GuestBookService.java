@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.javaex.dao.GuestBookDao;
+import com.javaex.vo.BoardVo;
 import com.javaex.vo.GuestBookVo;
 
 @Service
@@ -40,5 +41,10 @@ public class GuestBookService {
 	public void delete(int no,String password) {
 		
 		guestbookdao.deleteGuestbook(no, password);
+	}
+	
+	public GuestBookVo getGuestbookByNo(int no) {
+		
+		return guestbookdao.selectGuestbook(no);
 	}
 }

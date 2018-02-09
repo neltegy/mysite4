@@ -1,6 +1,8 @@
 package com.javaex.api.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,20 +40,27 @@ public class ApiGuestbookController {
 	
 	@ResponseBody
 	@RequestMapping(value="/gb/api/delete",method=RequestMethod.POST)
-	public int apidelete(@RequestBody GuestBookVo guestbookvo) {
-		//삭제버튼을 누르면 no를 가지고 controller(deleteform)로 온다
-		
-		//controller에서 no를 가지고 모달로 간다(성공시코드에 모달을 넣음)
-		
-		//모달에서 패스워드 입력을받고 확인을 누르면 controller(delete)로 온다. (아이디를 가지고 on 클릭시)
-		
-		//삭제를 하고
+	public Map<String, Object> apidelete(@RequestBody GuestBookVo guestbookvo) {
+		//모달 버튼을 누른것같은 효과를주려면
+		//.trigger(‘click’);
 		int no = guestbookvo.getNo();
 		String password = guestbookvo.getPassword();
+
+		GuestBookVo guestbookVo = guestbookservice.getGuestbookByNo(no);
+		
+		String res_password = guestbookVo.getPassword();
 		
 		guestbookservice.delete(no,password);
 		
-		return no;
+		Map<String, Object> map = new HashMap<String,Object>();
+		if(password.equals(res_password)) { //사용자 입력비번과 실제비번이 같을경우
+			map.put("fail", 1);
+			map.put("no", no);
+			return map;
+		}else { //비번이 다를경우
+			map.put("fail", 0);
+			return map;
+		}
 	}
 	
 }
